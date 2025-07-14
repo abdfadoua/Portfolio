@@ -22,7 +22,7 @@ const Projects = () => {
       description: "Application web pour la gestion d'entreprise, avec interfaces modernes et backend robuste. Regardez la démo vidéo pour une présentation des fonctionnalités.",
       image: "/weefarm.png",
       technologies: ["React.js", "Node.js", "PostgreSQL"],
-      liveUrl: "/public/Weefarmapp.mp4",
+      liveUrl: "https://youtu.be/MtrSgZb9Z08", // 👈 YouTube
       githubUrl: "https://github.com/abdfadoua/Weefarm",
       featured: true
     },
@@ -31,7 +31,7 @@ const Projects = () => {
       description: "Plateforme web pour un hypermarché avec évaluation complémentaire, intégrant des bases de données variées. Consultez le rapport pour plus de détails.",
       image: "/authcap.png",
       technologies: ["React.js", "Tailwind CSS", "Node.js", "PostgreSQL", "MongoDB"],
-      liveUrl: "/public/UOW-Demo.mp4",
+      liveUrl: "https://youtu.be/86mpmQxCYik", // 👈 YouTube
       githubUrl: "https://github.com/abdfadoua/UNOW-Emargement",
       featured: true
     },
@@ -88,8 +88,17 @@ const Projects = () => {
       description: "Tableau de bord de business intelligence pour la visualisation de données d'entreprise. Regardez la démo vidéo pour une présentation.",
       image: "/BI.png",
       technologies: ["PowerBI", "SQL"],
-      liveUrl: "/public/powerBI.mp4",
+      liveUrl: "https://youtu.be/uJWguA8RpEc", // 👈 YouTube
       githubUrl: "#",
+      featured: false
+    },
+    {
+      title: "Site de vente - Résine Art",
+      description: "Premier projet académique : un site vitrine simple pour la vente d’articles en résine artisanale, développé en HTML, CSS et JavaScript pur.",
+      image: "/resine.png",
+      technologies: ["HTML", "CSS", "JavaScript"],
+      liveUrl: "https://youtu.be/Y5PN6mESFmI", // 👈 YouTube
+      githubUrl: "https://github.com/abdfadoua/resine-site",
       featured: false
     }
   ];
