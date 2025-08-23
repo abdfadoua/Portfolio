@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, Github, Linkedin } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Github, Linkedin, Instagram, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
@@ -92,6 +92,18 @@ const Contact = () => {
       name: "LinkedIn",
       url: "https://www.linkedin.com/in/fadoua-abdelhak/",
       color: "hover:text-blue-600"
+    },
+    {
+      icon: <Instagram className="h-6 w-6" />,
+      name: "Instagram",
+      url: "https://www.instagram.com/abdelhak_fadwa/",
+      color: "hover:text-pink-600"
+    },
+    {
+      icon: <Facebook className="h-6 w-6" />,
+      name: "Facebook",
+      url: "https://www.facebook.com/fadwa.abdelhak.1",
+      color: "hover:text-blue-800"
     },
   ];
 

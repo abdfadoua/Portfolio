@@ -11,6 +11,7 @@ import Design from '@/components/Design';
 import Certificates from '@/components/Certificates';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
+import Associations from '@/components/Association';
 
 const Index = () => {
   return (
@@ -22,9 +23,12 @@ const Index = () => {
       <Education />
       <Skills />
       <Projects />
-      <Design />
       <Certificates />
+      <Associations />
+      <Design />
       <Contact />
+
+
       <Footer />
     </div>
   );
