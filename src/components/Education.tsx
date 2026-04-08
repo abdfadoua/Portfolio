@@ -4,6 +4,15 @@ import { GraduationCap, Calendar, MapPin, Award } from 'lucide-react';
 const Education = () => {
   const education = [
     {
+      degree: "1ère année du cycle d'ingénieur",
+      school: "École Polytechnique de Sousse",
+      location: "Sousse, Tunisie",
+      period: "2025 - Présent",
+      description: "Formation en Génie Informatique ",
+      grade: "Etudiante",
+      courses: ["Programmation Orientée Objet", "Bases de Données", "Développement Web", "Conception", "Services des Réseaux", "Programmation Java " , "Python" ,"Algorithmique" , "Système d exploitation "  ]
+    },
+    {
       degree: "Licence en Génie Logiciel de Systèmes et d'Information",
       school: "École Polytechnique de Sousse",
       location: "Sousse, Tunisie",

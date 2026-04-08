@@ -8,8 +8,10 @@ const Associations = () => {
     {
       position: 'Trésorière',
       period: '2025',
-      description: 'Gestion des finances et du budget de l\'organisation, en veillant à la transparence et à l\'efficacité des opérations financières pour soutenir les initiatives communautaires.',
+      description: 'Gestion des finances et du budget de l organisation, en veillant à la transparence et à l efficacité des opérations financières pour soutenir les initiatives communautaires. J ai également reçu la récompense de Vice-Présidente la plus remarquable dans la zone Centre-Ouest, en reconnaissance de mon engagement et de la qualité de mon travail',
       photos: [
+        './assoc/MVP.jpg',
+        './assoc/mvp1.jpg',
         './assoc/tres2.jpg',
         './assoc/tre1.jpg',
         './assoc/tres3.jpg',
