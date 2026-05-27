@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import emailjs from 'emailjs-com';
 import { Mail, Phone, MapPin, Send, Github, Linkedin, Instagram, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -8,54 +9,53 @@ const Contact = () => {
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
   });
+  
+  const [isSending, setIsSending] = useState(false);
   const { toast } = useToast();
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try {
-      const response = await fetch('http://localhost:3000/api/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    setIsSending(true);
 
-      if (response.ok) {
-        toast({
-          title: "Message envoyé !",
-          description: "Merci pour votre message. Il a été enregistré avec succès.",
-        });
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
-        });
-      } else {
-        const errorData = await response.json();
-        toast({
-          title: "Erreur",
-          description: errorData.error || "Une erreur s'est produite. Veuillez réessayer.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
+    try {
+      await emailjs.send(
+        'service_j2f4mbl',   
+        'template_vuk4w2s',  
+        {
+          name: `Portfolio - ${formData.name}`,
+          email: formData.email,     
+          title: formData.subject,   
+          message: formData.message, 
+          time: new Date().toLocaleString(), 
+        },
+        'HB_wB37kpcTHsRqCV'  
+      );
+
       toast({
-        title: "Erreur",
-        description: "Impossible de se connecter au serveur. Veuillez réessayer plus tard.",
+        title: "Message envoyé avec succès ✨",
+        description: "Merci pour votre message. Je vous répondrai dans les plus brefs délais.",
+      });
+      setFormData({ name: '', email: '', subject: '', message: '' });
+
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      toast({
+        title: "Oups, une erreur est survenue",
+        description: "Impossible d'envoyer le message. Veuillez réessayer.",
         variant: "destructive",
       });
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -69,7 +69,7 @@ const Contact = () => {
     {
       icon: <Phone className="h-6 w-6" />,
       title: "Téléphone",
-      value: "+21622419465",
+      value: "+216 22 419 465",
       link: "tel:+21622419465"
     },
     {
@@ -81,104 +81,83 @@ const Contact = () => {
   ];
 
   const socialLinks = [
-    {
-      icon: <Github className="h-6 w-6" />,
-      name: "GitHub",
-      url: "https://github.com/abdfadoua",
-      color: "hover:text-gray-900"
-    },
-    {
-      icon: <Linkedin className="h-6 w-6" />,
-      name: "LinkedIn",
-      url: "https://www.linkedin.com/in/fadoua-abdelhak/",
-      color: "hover:text-blue-600"
-    },
-    {
-      icon: <Instagram className="h-6 w-6" />,
-      name: "Instagram",
-      url: "https://www.instagram.com/abdelhak_fadwa/",
-      color: "hover:text-pink-600"
-    },
-    {
-      icon: <Facebook className="h-6 w-6" />,
-      name: "Facebook",
-      url: "https://www.facebook.com/fadwa.abdelhak.1",
-      color: "hover:text-blue-800"
-    },
+    { icon: <Github className="h-5 w-5" />, name: "GitHub", url: "https://github.com/abdfadoua" },
+    { icon: <Linkedin className="h-5 w-5" />, name: "LinkedIn", url: "https://www.linkedin.com/in/fadoua-abdelhak/" },
+    { icon: <Instagram className="h-5 w-5" />, name: "Instagram", url: "https://www.instagram.com/abdelhak_fadwa/" },
+    { icon: <Facebook className="h-5 w-5" />, name: "Facebook", url: "https://www.facebook.com/fadwa.abdelhak.1" },
   ];
 
   return (
-    <section id="contact" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-6">
+    <section id="contact" className="py-24 bg-slate-50 flex items-center justify-center min-h-screen">
+      <div className="container mx-auto px-4 sm:px-6">
+        
+        {/* En-tête */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Contactez-moi</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Une idée de projet ? Une opportunité ? N'hésitez pas à me contacter !
+          <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+            Parlons de votre <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500">Projet</span>
+          </h2>
+          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+            Une question, une opportunité ou simplement envie de dire bonjour ? Je suis à votre écoute.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          <div>
-            <h3 className="text-2xl font-bold mb-8">Restons en Contact</h3>
-            
-            <div className="space-y-6 mb-8">
-              {contactInfo.map((info, index) => (
-                <div key={index} className="flex items-center">
-                  <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-white mr-4">
-                    {info.icon}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">{info.title}</h4>
-                    <a 
-                      href={info.link}
-                      className="text-gray-600 hover:text-blue-600 transition-colors"
-                    >
-                      {info.value}
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* Le Container Principal (Split Design) */}
+        <div className="max-w-6xl mx-auto bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 overflow-hidden flex flex-col lg:flex-row border border-slate-100">
+          
+          {/* PANNEAU GAUCHE : Coordonnées (Sombre & Premium) */}
+          <div className="lg:w-2/5 bg-slate-900 p-10 lg:p-12 text-white relative overflow-hidden flex flex-col justify-between">
+            {/* Effets d'arrière-plan (Cercles floutés) */}
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-indigo-500/20 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-cyan-500/20 blur-3xl"></div>
 
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Suivez-moi</h4>
-              <div className="flex gap-4">
-                {socialLinks.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.url}
-                    className={`p-3 bg-white rounded-lg shadow-md text-gray-600 transition-all duration-300 hover:shadow-lg ${social.color}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {social.icon}
-                  </a>
+            <div className="relative z-10">
+              <h3 className="text-3xl font-bold mb-2">Contactez-moi</h3>
+              <p className="text-slate-400 mb-10">Remplissez le formulaire et je vous répondrai sous 24 heures.</p>
+
+              {/* Liste des contacts repensée */}
+              <div className="space-y-8">
+                {contactInfo.map((info, index) => (
+                  <div key={index} className="flex items-center group">
+                    <div className="flex-shrink-0 w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+                      {info.icon}
+                    </div>
+                    <div className="ml-6">
+                      <p className="text-sm text-slate-400 uppercase tracking-wider font-medium mb-1">{info.title}</p>
+                      <a href={info.link} className="text-lg font-medium text-white hover:text-indigo-300 transition-colors">
+                        {info.value}
+                      </a>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
 
-            <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
-              <h4 className="font-bold text-gray-900 mb-2">Disponibilité</h4>
-              <p className="text-gray-600 mb-2">
-                Je suis actuellement disponible pour de nouveaux projets freelance 
-                ou opportunités à temps plein.
-              </p>
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                <span className="text-green-600 font-medium">Disponible maintenant</span>
+            {/* Réseaux sociaux repensés (Pilules) */}
+            <div className="relative z-10 mt-16 pt-10 border-t border-white/10">
+              <p className="text-sm text-slate-400 uppercase tracking-wider font-medium mb-6">Retrouvez-moi sur</p>
+              <div className="flex flex-wrap gap-4">
+                {socialLinks.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.url}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="text-indigo-400">{social.icon}</span>
+                    <span className="font-medium text-sm text-white">{social.name}</span>
+                  </a>
+                ))}
               </div>
             </div>
           </div>
 
-          <div>
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8">
-              <h3 className="text-2xl font-bold mb-6">Envoyez-moi un message</h3>
-              
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Nom complet
-                  </label>
+          {/* PANNEAU DROIT : Formulaire (Clair & Minimaliste) */}
+          <div className="lg:w-3/5 p-10 lg:p-14">
+            <form onSubmit={handleSubmit} className="h-full flex flex-col justify-center">
+              <div className="grid sm:grid-cols-2 gap-6 mb-6">
+                <div className="space-y-2">
+                  <label htmlFor="name" className="text-sm font-semibold text-slate-700 ml-1">Nom complet</label>
                   <input
                     type="text"
                     id="name"
@@ -186,15 +165,13 @@ const Contact = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    placeholder="Votre nom"
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none text-slate-700 placeholder:text-slate-400"
+                    placeholder="Jean Dupont"
                   />
                 </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
-                  </label>
+
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-semibold text-slate-700 ml-1">Adresse e-mail</label>
                   <input
                     type="email"
                     id="email"
@@ -202,16 +179,14 @@ const Contact = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    placeholder="votre@email.com"
+                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none text-slate-700 placeholder:text-slate-400"
+                    placeholder="jean@exemple.com"
                   />
                 </div>
               </div>
 
-              <div className="mb-6">
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                  Sujet
-                </label>
+              <div className="space-y-2 mb-6">
+                <label htmlFor="subject" className="text-sm font-semibold text-slate-700 ml-1">Sujet</label>
                 <input
                   type="text"
                   id="subject"
@@ -219,37 +194,46 @@ const Contact = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Sujet de votre message"
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none text-slate-700 placeholder:text-slate-400"
+                  placeholder="Comment puis-je vous aider ?"
                 />
               </div>
 
-              <div className="mb-6">
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Message
-                </label>
+              <div className="space-y-2 mb-8">
+                <label htmlFor="message" className="text-sm font-semibold text-slate-700 ml-1">Message</label>
                 <textarea
                   id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
-                  placeholder="Décrivez votre projet ou votre demande..."
+                  rows={5}
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none text-slate-700 placeholder:text-slate-400 resize-none"
+                  placeholder="Décrivez votre projet ou votre besoin en détail..."
                 ></textarea>
               </div>
 
-              <Button 
-                type="submit" 
-                size="lg" 
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isSending}
+                className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed text-base font-medium shadow-lg shadow-indigo-200"
               >
-                <Send className="mr-2 h-5 w-5" />
-                Envoyer le message
+                {isSending ? (
+                  <span className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    Envoi en cours...
+                  </span>
+                ) : (
+                  <span className="flex items-center group">
+                    Envoyer le message
+                    <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </span>
+                )}
               </Button>
             </form>
           </div>
+          
         </div>
       </div>
     </section>
